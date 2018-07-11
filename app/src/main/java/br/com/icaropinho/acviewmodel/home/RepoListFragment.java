@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.com.icaropinho.acviewmodel.R;
+import br.com.icaropinho.acviewmodel.details.RepoDetailsFragment;
 import br.com.icaropinho.acviewmodel.model.Repo;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +27,7 @@ import butterknife.Unbinder;
  * Created by icaro on 03/07/2018.
  */
 
-public class RepoListFragment extends Fragment {
+public class RepoListFragment extends Fragment implements RepoSelectedListener {
 
     @BindView(R.id.rv_repos)
     RecyclerView mRvRepos;
@@ -55,7 +56,7 @@ public class RepoListFragment extends Fragment {
         mViewModel = ViewModelProviders.of(this).get(RepoListViewModel.class);
 
         mRvRepos.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        mRvRepos.setAdapter(new RepoListAdapter(mViewModel, this));
+        mRvRepos.setAdapter(new RepoListAdapter(mViewModel, this, this));
         mRvRepos.setLayoutManager(new LinearLayoutManager(getContext()));
         observeViewModel();
     }
@@ -83,6 +84,17 @@ public class RepoListFragment extends Fragment {
                 mRvRepos.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override
+    public void onRepoSelected(Repo repo) {
+        //scope from activity, not fragment
+        SelectedRepoViewModel selectedRepoViewModel = ViewModelProviders.of(getActivity()).get(SelectedRepoViewModel.class);
+        selectedRepoViewModel.setSelectedRepo(repo);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.screen_container, new RepoDetailsFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override

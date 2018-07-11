@@ -23,8 +23,10 @@ import butterknife.ButterKnife;
 public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoViewHolder>{
 
     private List<Repo> mRepos = new ArrayList<>();
+    private RepoSelectedListener mListener;
 
-    public RepoListAdapter(RepoListViewModel viewModel, LifecycleOwner lifecycleOwner) {
+    public RepoListAdapter(RepoListViewModel viewModel, LifecycleOwner lifecycleOwner, RepoSelectedListener listener) {
+        mListener = listener;
         viewModel.getRepos().observe(lifecycleOwner, repos -> {
             mRepos.clear();
             if (repos != null) {
@@ -40,7 +42,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
     @Override
     public RepoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.repo_list_item, parent, false);
-        return new RepoViewHolder(view);
+        return new RepoViewHolder(view, mListener);
     }
 
     @Override
@@ -65,12 +67,20 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.RepoVi
         @BindView(R.id.tv_forks) TextView tvForks;
         @BindView(R.id.tv_stars) TextView tvStars;
 
-        RepoViewHolder(View itemView) {
+        private Repo repo;
+
+        RepoViewHolder(View itemView, RepoSelectedListener listener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(v -> {
+                if (repo != null) {
+                    listener.onRepoSelected(repo);
+                }
+            });
         }
 
         void bind(Repo repo) {
+            this.repo = repo;
             tvRepoName.setText(repo.getName());
             tvRepoDescription.setText(repo.getDescription());
             tvForks.setText(String.valueOf(repo.getForks()));
