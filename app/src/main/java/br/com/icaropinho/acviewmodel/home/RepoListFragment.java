@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +53,10 @@ public class RepoListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mViewModel = ViewModelProviders.of(this).get(RepoListViewModel.class);
+
+        mRvRepos.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        mRvRepos.setAdapter(new RepoListAdapter(mViewModel, this));
+        mRvRepos.setLayoutManager(new LinearLayoutManager(getContext()));
         observeViewModel();
     }
 

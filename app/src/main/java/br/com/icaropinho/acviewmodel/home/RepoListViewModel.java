@@ -28,6 +28,7 @@ public class RepoListViewModel extends ViewModel {
         fetchRepos();
     }
 
+    //TODO: Add repository pattern after finishing the course
     private void fetchRepos() {
         isLoading.setValue(true);
         call = RepoApi.getInstance().getRepositories();
