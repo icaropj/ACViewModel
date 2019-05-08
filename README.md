@@ -63,12 +63,14 @@ zabbix.data.key=credenciamento.email
 #Propriedades não obrigatórias (Valores padrão)
 zabbix.server.port=10051
 zabbix.data.value=online
+zabbix.health-check.interval=5000
 ```
 **zabbix.server.host** - Host do servidor Zabbix (Sem http/https) \
 **zabbix.data.host** - Host do grupo de alertas \
 **zabbix.data.key** - Identificador do alerta \
 **zabbix.server.port** - Porta do servidor Zabbix (Padrão 10051) \
-**zabbix.data.value** - Valor enviado no alerta(Padrão 'online')
+**zabbix.data.value** - Valor enviado no alerta (Padrão 'online')
+**zabbix.health-check.interval** - Valor em milissegundos do intervalo do alerta (Padrão 5000)
 
 #### Passo II - Anotar a classe main do Spring Boot
 ```
